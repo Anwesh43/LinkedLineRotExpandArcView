@@ -18,7 +18,7 @@ val colors : Array<Int> = arrayOf(
 ).map {
     Color.parseColor(it)
 }.toTypedArray()
-val parts : Int = 4
+val parts : Int = 5
 val scGap : Float = 0.02f / parts
 val strokeFactor : Float = 90f
 val sizeFactor : Float = 4.9f
@@ -36,15 +36,16 @@ fun Canvas.drawLineRotExpandArc(scale : Float, w : Float, h : Float, paint : Pai
     val sf : Float = scale.sinify()
     save()
     translate(w / 2, h / 2)
+    rotate(90f * sf.divideScale(3, parts))
     for (j in 0..1) {
         val r : Float = size * sf.divideScale(2, parts)
         val lSize : Float = size * sf.divideScale(0, parts)
         save()
-        rotate(rot * sf.divideScale(1, parts))
+        rotate(rot * sf.divideScale(1, parts) * (1f - 2 * j))
         drawLine(0f, -lSize, 0f, lSize, paint)
         restore()
         save()
-        drawArc(RectF(-r, -r, r, r), 90f * (1 + 2 * j) + rot, 2 * rot, true, paint)
+        drawArc(RectF(-r, -r, r, r), 90f * (1 + 2 * j) - rot, 2 * rot, true, paint)
         restore()
     }
     restore()
@@ -56,7 +57,7 @@ fun Canvas.drawLREANode(i : Int, scale : Float, paint : Paint) {
     paint.color = colors[i]
     paint.strokeWidth = Math.min(w, h) / strokeFactor
     paint.strokeCap = Paint.Cap.ROUND
-    drawLREANode(i, scale, paint)
+    drawLineRotExpandArc(scale, w, h, paint)
 }
 
 class LineRotExpandArcView(ctx : Context) : View(ctx) {
