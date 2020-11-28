@@ -1,0 +1,3 @@
+include ':linerotexpandarcview'
+include ':app'
+rootProject.name = "LinkedLineRotExpandArcView"
